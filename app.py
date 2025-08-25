@@ -8,7 +8,7 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph
 from reportlab.lib.styles import getSampleStyleSheet
 
 # Initialize OpenAI client
-client = OpenAI(api_key=os.getenv("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"))
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 # Function to extract text from uploaded PDF
 def extract_text_from_pdf(pdf_file):
@@ -99,3 +99,4 @@ if uploaded_file:
             file_name="questionnaire.pdf",
             mime="application/pdf"
         )
+
