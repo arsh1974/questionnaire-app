@@ -1,14 +1,14 @@
 import streamlit as st
 import PyPDF2
-import openai
+from openai import OpenAI
 import os
 from io import BytesIO
 from docx import Document
 from reportlab.platypus import SimpleDocTemplate, Paragraph
 from reportlab.lib.styles import getSampleStyleSheet
 
-# Load API key securely from Streamlit secrets
-openai.api_key = os.getenv("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")
+# Initialize OpenAI client
+client = OpenAI(api_key=os.getenv("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"))
 
 # Function to extract text from uploaded PDF
 def extract_text_from_pdf(pdf_file):
@@ -32,13 +32,16 @@ def generate_questions(text, level):
     ...
     """
 
-    response = openai.Completion.create(
-        engine="text-davinci-003",
-        prompt=prompt,
-        max_tokens=500,
-        temperature=0.7
+    response = client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {"role": "system", "content": "You are a helpful teacher assistant."},
+            {"role": "user", "content": prompt}
+        ],
+        temperature=0.7,
+        max_tokens=500
     )
-    return response.choices[0].text.strip()
+    return response.choices[0].message.content.strip()
 
 # Function to create Word file
 def create_word(questions, level):
